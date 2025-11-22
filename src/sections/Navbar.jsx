@@ -1,5 +1,6 @@
+
 import { useState } from "react";
-import { motion } from "motion/react";
+import { motion, AnimatePresence } from "motion/react";
 
 function Navigation({ onNavClick }) {
   const handleLinkClick = (e, sectionId) => {
@@ -24,33 +25,28 @@ function Navigation({ onNavClick }) {
     }
   };
 
+  const navItems = [
+    { id: 'home', label: 'Home' },
+    { id: 'about', label: 'About' },
+    { id: 'work', label: 'Projects' },
+    { id: 'experiences', label: 'Experience' },
+    { id: 'certifications', label: 'Certifications' },
+    { id: 'contact', label: 'Contact' },
+  ];
+
   return (
     <ul className="nav-ul">
-      <li className="nav-li">
-        <a className="nav-link" href="#home" onClick={(e) => handleLinkClick(e, 'home')}>
-          Home
-        </a>
-      </li>
-      <li className="nav-li">
-        <a className="nav-link" href="#about" onClick={(e) => handleLinkClick(e, 'about')}>
-          About
-        </a>
-      </li>
-      <li className="nav-li">
-        <a className="nav-link" href="#work" onClick={(e) => handleLinkClick(e, 'work')}>
-          Work
-        </a>
-      </li>
-      <li className="nav-li">
-        <a className="nav-link" href="#certifications" onClick={(e) => handleLinkClick(e, 'certifications')}>
-          Certifications
-        </a>
-      </li>
-      <li className="nav-li">
-        <a className="nav-link" href="#contact" onClick={(e) => handleLinkClick(e, 'contact')}>
-          Contact
-        </a>
-      </li>
+      {navItems.map((item) => (
+        <li key={item.id} className="nav-li">
+          <a 
+            className="nav-link" 
+            href={`#${item.id}`} 
+            onClick={(e) => handleLinkClick(e, item.id)}
+          >
+            {item.label}
+          </a>
+        </li>
+      ))}
     </ul>
   );
 }
@@ -89,12 +85,13 @@ const Navbar = () => {
           </div>
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="flex cursor-pointer text-orange-500 hover:text-orange-600 focus:outline-none sm:hidden"
+            className="flex items-center justify-center w-10 h-10 rounded-lg cursor-pointer text-orange-500 hover:text-orange-600 hover:bg-orange-50 focus:outline-none transition-colors sm:hidden"
+            aria-label="Toggle menu"
           >
             <img
               src={isOpen ? "assets/close.svg" : "assets/menu.svg"}
               className="w-6 h-6"
-              alt="toggle"
+              alt={isOpen ? "Close menu" : "Open menu"}
             />
           </button>
           <nav className="hidden sm:flex">
@@ -102,19 +99,21 @@ const Navbar = () => {
           </nav>
         </div>
       </div>
-      {isOpen && (
-        <motion.div
-          className="block overflow-hidden text-center sm:hidden bg-white border-t border-orange-100"
-          initial={{ opacity: 0, x: -10 }}
-          animate={{ opacity: 1, x: 0 }}
-          style={{ maxHeight: "100vh" }}
-          transition={{ duration: 1 }}
-        >
-          <nav className="pb-5">
-            <Navigation onNavClick={handleNavClick} />
-          </nav>
-        </motion.div>
-      )}
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            className="block overflow-hidden sm:hidden bg-white border-t border-orange-100 shadow-lg"
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.3, ease: "easeInOut" }}
+          >
+            <nav className="py-4 px-4">
+              <Navigation onNavClick={handleNavClick} />
+            </nav>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };

@@ -94,11 +94,11 @@ body {
 }
 
 .nav-li {
-  @apply text-slate-500 hover:text-orange-500 max-sm:w-full max-sm:rounded-md py-2 max-sm:px-5;
+  @apply text-slate-500 hover:text-orange-500 max-sm:w-full max-sm:rounded-md py-2 max-sm:px-4 max-sm:text-left;
 }
 
 .nav-link {
-  @apply text-lg md:text-base hover:text-orange-500 transition-colors;
+  @apply text-lg md:text-base hover:text-orange-500 transition-colors max-sm:w-full max-sm:block max-sm:py-2 max-sm:px-4 max-sm:rounded-lg max-sm:hover:bg-orange-50;
 }
 /* Button Components */
 .btn {
